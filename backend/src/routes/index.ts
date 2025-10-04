@@ -7,6 +7,15 @@ const router = Router()
 router.use('/users', userRoutes)
 router.use('/examples', exampleRoutes)
 
+router.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'API router health',
+    path: '/api/health',
+    timestamp: new Date().toISOString()
+  })
+})
+
 router.get('/', (req, res) => {
   res.json({
     message: 'API is working',
@@ -14,7 +23,8 @@ router.get('/', (req, res) => {
     endpoints: {
       users: '/api/users',
       examples: '/api/examples',
-      health: '/health'
+      health: '/health',
+      api_health: '/api/health'
     }
   })
 })
