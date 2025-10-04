@@ -9,7 +9,6 @@ export async function connectRedis(): Promise<Redis> {
                    'redis://localhost:6379'
 
     redisClient = new Redis(redisUrl, {
-      retryDelayOnFailover: 100,
       enableReadyCheck: false,
       maxRetriesPerRequest: null,
       lazyConnect: true,

@@ -14,7 +14,6 @@ export async function connectUpstashRedis(): Promise<Redis> {
 
     upstashClient = new Redis(redisUrl, {
       password: redisToken,
-      retryDelayOnFailover: 100,
       enableReadyCheck: false,
       maxRetriesPerRequest: 3,
       lazyConnect: true,

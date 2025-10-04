@@ -20,7 +20,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id)
+    const userId = parseInt(req.params.id || '')
     const pool = getPostgresPool()
 
     const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId])

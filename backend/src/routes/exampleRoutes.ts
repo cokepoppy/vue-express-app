@@ -30,7 +30,7 @@ router.get('/cache-test', async (req: Request, res: Response) => {
 
     await upstashCache.set(cacheKey, data, 60)
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Data fetched and cached in Upstash Redis',
       data,
