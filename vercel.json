@@ -5,7 +5,16 @@
       "src": "api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["backend/dist/**"]
+        "includeFiles": [
+          "backend/dist/**",
+          "node_modules/express/**",
+          "node_modules/cors/**",
+          "node_modules/helmet/**",
+          "node_modules/pg/**",
+          "node_modules/ioredis/**",
+          "node_modules/mongoose/**",
+          "node_modules/dotenv/**"
+        ]
       }
     },
     {
