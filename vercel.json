@@ -13,6 +13,11 @@
       }
     }
   ],
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "backend/dist/**"
+    }
+  },
   "routes": [
     { "src": "/api$", "dest": "/api/index.ts" },
     { "src": "/api/(.*)", "dest": "/api/index.ts" },
