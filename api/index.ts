@@ -30,15 +30,6 @@ app.get('/api/health', (req, res) => {
   })
 })
 
-// Fallback for /api/users to avoid 404 before backend routes mount
-app.get('/api/users', (req, res, next) => {
-  if (routesMounted) return next()
-  res.status(503).json({
-    success: false,
-    message: 'Users route not ready yet',
-    hint: 'Configure DATABASE_URL and wait for backend routes to mount'
-  })
-})
 
 let routesMounted = false
 
