@@ -1,12 +1,13 @@
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
-import { connectDatabase } from '../backend/src/config/database'
-import { connectRedis } from '../backend/src/config/redis'
-import { connectPostgres } from '../backend/src/config/postgres'
-import { connectUpstashRedis } from '../backend/src/config/upstashRedis'
-import apiRoutes from '../backend/src/routes'
-import { errorHandler } from '../backend/src/middleware/errorHandler'
+// Import compiled backend code to avoid TypeScript build in Vercel function
+import { connectDatabase } from '../backend/dist/config/database'
+import { connectRedis } from '../backend/dist/config/redis'
+import { connectPostgres } from '../backend/dist/config/postgres'
+import { connectUpstashRedis } from '../backend/dist/config/upstashRedis'
+import apiRoutes from '../backend/dist/routes'
+import { errorHandler } from '../backend/dist/middleware/errorHandler'
 
 const app = express()
 
