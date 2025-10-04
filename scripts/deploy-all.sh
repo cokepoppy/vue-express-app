@@ -17,7 +17,7 @@ NC='\033[0m'
 
 # Token 配置
 VERCEL_TOKEN="x3SDdzVUt6vjgH36CJbAlEYu"
-SUPABASE_TOKEN="sb_secret_poBOnx-NRvksdhO2m7fAEw_BkELxAHW"
+SUPABASE_TOKEN="sbp_aa77382a0da5e4051274b3cf6504e7d2ad6736f8"
 
 # 项目配置
 PROJECT_NAME="vue-express-app"
