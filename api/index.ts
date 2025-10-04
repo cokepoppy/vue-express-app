@@ -36,8 +36,15 @@ let isConnected = false
 async function ensureConnections() {
   if (!isConnected) {
     try {
-      await connectDatabase()
-      await connectRedis()
+      // Connect to MongoDB only if explicitly configured
+      if (process.env.MONGODB_URI) {
+        await connectDatabase()
+      }
+
+      // Connect to Redis (non-Upstash) only if URL provided
+      if (process.env.REDIS_URL) {
+        await connectRedis()
+      }
 
       // Connect to Supabase Postgres if configured
       if (process.env.POSTGRES_URL || process.env.DATABASE_URL) {
