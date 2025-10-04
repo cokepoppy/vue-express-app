@@ -32,6 +32,19 @@ app.get('/api/health', (req, res) => {
 
 let routesMounted = false
 
+// Try mounting backend routes at startup so /api/* works even if connections fail
+(() => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mod = require('../backend/dist/routes')
+    const apiRoutes = mod.default || mod
+    app.use('/api', apiRoutes)
+    routesMounted = true
+  } catch (e) {
+    console.error('Failed to require backend module at startup:', e)
+  }
+})()
+
 let isConnected = false
 
 function requireBackend<T = any>(path: string): T | null {
@@ -75,19 +88,7 @@ async function ensureConnections() {
         await mod?.connectUpstashRedis?.()
       }
 
-      // Mount API routes lazily once (from compiled backend)
-      if (!routesMounted) {
-        const routesModule = requireBackend<any>('../backend/dist/routes')
-        if (routesModule) {
-          const apiRoutes = routesModule.default || routesModule
-          app.use('/api', apiRoutes)
-        } else {
-          app.get('/api', (_req, res) => {
-            res.json({ message: 'API is working', routes: [], note: 'Backend routes not mounted' })
-          })
-        }
-        routesMounted = true
-      }
+      // Routes may have been mounted at startup; keep as-is
 
       isConnected = true
     } catch (error) {
