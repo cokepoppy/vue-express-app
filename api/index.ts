@@ -21,6 +21,15 @@ app.get('/health', (req, res) => {
   })
 })
 
+// Ensure /api/health works even if backend routes haven't mounted yet
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'API health (function-level)',
+    timestamp: new Date().toISOString()
+  })
+})
+
 let routesMounted = false
 
 let isConnected = false
