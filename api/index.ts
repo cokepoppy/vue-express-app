@@ -68,7 +68,7 @@ async function ensureConnections() {
 
       // Mount API routes lazily once (from compiled backend)
       if (!routesMounted) {
-        const routesModule = requireBackend<any>('../backend/dist/routes.js')
+        const routesModule = requireBackend<any>('../backend/dist/routes')
         if (routesModule) {
           const apiRoutes = routesModule.default || routesModule
           app.use('/api', apiRoutes)
