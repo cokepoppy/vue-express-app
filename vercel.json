@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "api/index.ts",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["backend/dist/**"]
+      }
     },
     {
       "src": "frontend/package.json",
@@ -13,11 +16,6 @@
       }
     }
   ],
-  "functions": {
-    "api/**/*.ts": {
-      "includeFiles": "backend/dist/**"
-    }
-  },
   "routes": [
     { "src": "/api$", "dest": "/api/index.ts" },
     { "src": "/api/(.*)", "dest": "/api/index.ts" },
