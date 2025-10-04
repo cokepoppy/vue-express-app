@@ -14,11 +14,11 @@
     }
   ],
   "routes": [
-    { "src": "/api$,", "dest": "/api/index.ts" },
-    { "src": "/api/(.*)", "dest": "/api/index.ts" },
-    { "src": "/health", "dest": "/api/index.ts" },
+    { "src": "/api$", "dest": "api/index.ts" },
+    { "src": "/api/(.*)", "dest": "api/index.ts" },
+    { "src": "/health", "dest": "api/index.ts" },
     { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/frontend/dist/index.html" }
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
   "installCommand": "npm run install:all",
   "buildCommand": "npm run build",
