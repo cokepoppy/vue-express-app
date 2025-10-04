@@ -1,13 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
-// Import backend source; api package provides required runtime deps and types
-import { connectDatabase } from '../backend/src/config/database'
-import { connectRedis } from '../backend/src/config/redis'
-import { connectPostgres } from '../backend/src/config/postgres'
-import { connectUpstashRedis } from '../backend/src/config/upstashRedis'
-import apiRoutes from '../backend/src/routes'
-import { errorHandler } from '../backend/src/middleware/errorHandler'
 
 const app = express()
 
@@ -28,37 +21,58 @@ app.get('/health', (req, res) => {
   })
 })
 
-app.use('/api', apiRoutes)
-
-app.use(errorHandler)
+let routesMounted = false
 
 let isConnected = false
 
 async function ensureConnections() {
   if (!isConnected) {
     try {
-      // Connect to MongoDB only if explicitly configured
+      // Lazy import backend only when needed to avoid cold-start crashes
       if (process.env.MONGODB_URI) {
+        const { connectDatabase } = await import('../backend/src/config/database')
         await connectDatabase()
       }
-
-      // Connect to Redis (non-Upstash) only if URL provided
       if (process.env.REDIS_URL) {
+        const { connectRedis } = await import('../backend/src/config/redis')
         await connectRedis()
       }
-
-      // Connect to Supabase Postgres if configured
       if (process.env.POSTGRES_URL || process.env.DATABASE_URL) {
+        const { connectPostgres } = await import('../backend/src/config/postgres')
         await connectPostgres()
       }
-
-      // Connect to Upstash Redis if credentials provided
       if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+        const { connectUpstashRedis } = await import('../backend/src/config/upstashRedis')
         await connectUpstashRedis()
       }
+
+      // Mount API routes lazily once
+      if (!routesMounted) {
+        try {
+          const routesModule = await import('../backend/src/routes')
+          const apiRoutes = routesModule.default || routesModule
+          app.use('/api', apiRoutes)
+          routesMounted = true
+        } catch (routeErr) {
+          console.error('Failed to mount API routes:', routeErr)
+          if (!routesMounted) {
+            app.get('/api', (_req, res) => {
+              res.json({ message: 'API is working', routes: [], note: 'Backend routes not mounted' })
+            })
+            routesMounted = true
+          }
+        }
+      }
+
       isConnected = true
     } catch (error) {
-      console.error('Failed to connect to services:', error)
+      console.error('Failed to initialize services:', error)
+      if (!routesMounted) {
+        app.get('/api', (_req, res) => {
+          res.json({ message: 'API is working (degraded)', error: String(error) })
+        })
+        routesMounted = true
+      }
     }
   }
 }
