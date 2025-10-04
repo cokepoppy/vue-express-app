@@ -1,0 +1,41 @@
+{
+  "name": "vue-express-app",
+  "version": "1.0.0",
+  "description": "Vue3 + Express 全栈应用，支持 Vercel + Supabase 部署",
+  "scripts": {
+    "setup:supabase": "node scripts/setup-supabase.js",
+    "dev:supabase": "supabase start",
+    "stop:supabase": "supabase stop",
+    "reset:supabase": "supabase db reset",
+    "migrate:supabase": "supabase db push",
+    "studio": "supabase db studio",
+    "link:supabase": "supabase link --project-ref YOUR_PROJECT_ID",
+
+    "deploy": "node scripts/check-env.js && ./scripts/deploy-all.sh",
+    "deploy:auto": "./scripts/deploy-all.sh",
+    "deploy:vercel": "vercel --prod",
+    "deploy:check": "./scripts/check-deployment.sh",
+    "deploy:supabase": "./scripts/supabase-deploy.sh",
+
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "vue3",
+    "express",
+    "supabase",
+    "vercel",
+    "typescript",
+    "fullstack"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "readline-sync": "^1.4.10"
+  }
+}
